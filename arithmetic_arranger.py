@@ -23,13 +23,32 @@ def generate_problem(problem):
 
 def arithmetic_arranger(problems, give_answer = False):
   #TODO : check the number of problems given
-  organized_problems = []
+  split_problems = []
+  arranged_problemList = []
+  arranged_problems = ""
 
   for problem in problems:
-    organized_problems.append(generate_problem(problem))
+    split_problems.append(generate_problem(problem))
 
-  if give_answer:
-    for problem in organized_problems:
-      print(problem.find_answer())
   
+  for problem in split_problems:
+    if problem.error_flag:
+      arranged_problemList.append(problem.check_operand())
+      break
+    arranged_problemList.append(str(problem.value_1))
+    arranged_problemList.append("\n")
+    arranged_problemList.append(problem.operand)
+    arranged_problemList.append("\n")
+    arranged_problemList.append(str(problem.value_2))
+    arranged_problemList.append("\n")
+
+    if give_answer:
+      arranged_problemList.append("-----")
+      arranged_problemList.append("\n")
+      arranged_problemList.append(problem.find_answer())
+      arranged_problemList.append("\n")
+  
+  for math_string in arranged_problemList:
+    arranged_problems += math_string
+  print(arranged_problems)
   #return arranged_problems
