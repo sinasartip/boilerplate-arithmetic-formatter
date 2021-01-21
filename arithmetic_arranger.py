@@ -34,22 +34,67 @@ def generate_problem(problem, val1, val2, operand, error, ans):
 
   return (val1, val2, operand, error, ans)
 
-def append_value(valueList, OutputList, adjust_side):
-  for value in valueList:
-    adjust = 4-len(str(value))
-    if adjust_side == 'left':
-      for _ in range(adjust):
-        OutputList.append(" ")  
-    
-    OutputList.append("    ")
-    OutputList.append(str(value))
 
-    if adjust_side == 'right':
-      for _ in range(adjust):
-        OutputList.append(" ")  
+class printer():
+  def __init__(self, val1, val2, operand, ans, give_answer):
+    self.val1 = val1
+    self.val2 = val2
+    self.operand = operand
+    self.ans = ans
+    self.outputList = []
 
-  return OutputList
+    self.start_printer(give_answer)
+
+  def start_printer(self, give_answer):
+    self.draw_line_1()
+    self.draw_line_2()
+    self.draw_line_3()
+    if give_answer:
+      self.draw_line_4()
+
+  def draw_line_1(self):
+    for value in self.val1:
+      adjust = 5-len(str(value))
+      
+      for _ in range(adjust):
+        self.outputList.append(" ")  
+      
+      self.outputList.append(str(value))
+      self.outputList.append("    ")
+
+    self.outputList.append("\n")
   
+  def draw_line_2(self):
+    i = 0
+    
+    for oprnd in self.operand:
+      self.outputList.append(oprnd)
+      adjust = 4-len(str(self.val2[i]))
+
+      for _ in range(adjust):
+        self.outputList.append(" ")
+
+      self.outputList.append(str(self.val2[i]))
+      self.outputList.append("    ")
+      i += 1
+    
+    self.outputList.append("\n")
+
+  def draw_line_3(self):
+    for _ in self.val1:
+      self.outputList.append("-----")
+      self.outputList.append("    ")
+    self.outputList.append("\n")
+
+  def draw_line_4(self):
+    for ans in self.ans:
+      adjust = 5-len(str(ans))
+      
+      for _ in range(adjust):
+        self.outputList.append(" ")
+
+      self.outputList.append(ans)
+      self.outputList.append("    ")  
 
 def arithmetic_arranger(problems, give_answer = False):
   #TODO : check the number of problems given
@@ -67,19 +112,10 @@ def arithmetic_arranger(problems, give_answer = False):
   if error.count(True) > 1:    
     arranged_problemList.append(problem.check_operand())
   else:
-    arranged_problemList = append_value(val1, arranged_problemList,'left')
-    arranged_problemList.append("\n")
-    arranged_problemList = append_value(operand, arranged_problemList,'right')
-    arranged_problemList = append_value(val2, arranged_problemList,'left')
-    arranged_problemList.append("\n")
-    for _ in range(len(val1)):
-      arranged_problemList.append("    ")
-      arranged_problemList.append("-----")
-    arranged_problemList.append("\n")
-    if give_answer:
-      arranged_problemList = append_value(ans, arranged_problemList,'left')
+    print_ans = printer(val1, val2, operand, ans, give_answer)
+    arranged_problemList = print_ans.outputList
 
   for math_string in arranged_problemList:
     arranged_problems += math_string
-  print(arranged_problems)
-  #return arranged_problems
+  # print(arranged_problems)
+  return arranged_problems
